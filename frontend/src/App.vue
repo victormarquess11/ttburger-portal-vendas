@@ -1,35 +1,35 @@
 <template>
-  <NavBar/>
+  <NavBar />
 
-  <MainLogo/>
+  <MainLogo />
 
-  <h1>Acompanhamento de Vendas</h1>
+  <TableTitle />
 
-  <TableSales/>
-
+  <TableSales />
 </template>
 
 <script>
-import MainLogo from './components/MainLogo.vue'
-import NavBar from './components/NavBar.vue'
-import TableSales from './components/TableSales.vue'
+import MainLogo from "./components/MainLogo.vue";
+import NavBar from "./components/NavBar.vue";
+import TableSales from "./components/TableSales.vue";
+import TableTitle from "./components/TableTitle.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     MainLogo,
     NavBar,
-    TableSales
-  }
-}
+    TableSales,
+    TableTitle,
+  },
+};
 </script>
 
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@200;300;400;500;600;700;800;900&display=swap");
 
 #app {
-  font-family: 'Heebo', sans-serif;
+  font-family: "Heebo", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -43,8 +43,8 @@ h1 {
 }
 
 @media screen and (max-width: 767px) {
-    h1 {
-      font-size: 32px;
-    }
+  h1 {
+    font-size: 32px;
   }
+}
 </style>
