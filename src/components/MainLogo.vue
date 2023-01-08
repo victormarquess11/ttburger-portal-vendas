@@ -6,16 +6,15 @@
 
 <style scoped>
     .main-logo {
-        width: 440px;
-        min-width: 150px;
-        max-width: 100%;
+        width: 30vw;
+        min-width: 250px;
         margin: auto;
-        margin-bottom: 1em;
+        margin-bottom: 1vh;
+        margin-top: 8vh;
     }
 
     #main-logo-img {
         height: 100%;
         width: 100%;
-        object-fit: contain;
     }
 </style>

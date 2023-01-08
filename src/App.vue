@@ -1,4 +1,4 @@
-<template> 
+<template>
   <NavBar/>
 
   <MainLogo/>
@@ -39,6 +39,12 @@ export default {
 
 h1 {
   font-weight: 700;
-  font-size: 34px;
+  font-size: 1.8rem;
 }
+
+@media screen and (max-width: 767px) {
+    h1 {
+      font-size: 24px;
+    }
+  }
 </style>

@@ -10,7 +10,7 @@
             <div class="navItems middle-nav-items">
                 <p>Início</p>
             </div>
-            
+
         </div>
 
         <div class="navItems right-items">
@@ -23,7 +23,7 @@
 <style scoped>
     .navbar {
         height: 50px;
-        width: 100%;
+        width: 100vw;
         background-color: black;
         display: flex;
         justify-content: space-between;
@@ -36,7 +36,7 @@
         justify-content: flex-start;
         align-items: center;
         width: 80%;
-        min-width: 60px;
+        flex: 2 3 80%;
     }
 
     .right-items {
@@ -44,11 +44,12 @@
         display: flex;
         justify-content: flex-end;
         width: 20%;
-        min-width: 100px;
+        flex: 0 0 20%;
     }
 
     .title-nav-items {
         padding-left: 10px;
+        flex: 0 0 10%;
         width: 10%;
         min-width: 140px;
     }
