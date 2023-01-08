@@ -52,10 +52,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow-x: scroll;
     }
 
     table {
-        min-width: 70%;
         text-align: center;
         border: 1px solid;
         border-color: red;
@@ -85,6 +85,8 @@
         border: 2px solid;
         border-color: rgba(51, 51, 51, 0.379);
         vertical-align: middle;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     td {
@@ -99,5 +101,13 @@
         color: #3C59FF;
         font-weight: 700;
     }
+
+
+    @media screen and (max-width: 520px) {
+    .divSales {
+      display: flex;
+      justify-content: flex-start;
+    }
+  }
 
 </style>

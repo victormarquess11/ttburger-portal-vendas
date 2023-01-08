@@ -13,8 +13,10 @@
 
         </div>
 
-        <div class="navItems right-items">
-            <p>Logout</p>
+        <div class="right-items">
+            <div class="navItems">
+                <p>Logout</p>
+            </div>
         </div>
 
     </header>
@@ -28,6 +30,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .navItems p {
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 16px;
+        color: white;
+        font-weight: 400;
     }
 
     .left-items {
@@ -63,21 +73,12 @@
     }
 
     .title-nav-items p {
-        font-size: 22px;
-        font-weight: 700;
+        font-size: 20px;
+        font-weight: 600;
     }
 
     .right-items p {
         color: rgb(141, 141, 141);
         font-weight: 450;
     }
-
-    .navItems p {
-        padding-left: 15px;
-        padding-right: 15px;
-        font-size: 16px;
-        color: white;
-        font-weight: 400;
-    }
-
 </style>

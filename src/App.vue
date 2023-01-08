@@ -39,12 +39,12 @@ export default {
 
 h1 {
   font-weight: 700;
-  font-size: 1.8rem;
+  font-size: 2.5rem;
 }
 
 @media screen and (max-width: 767px) {
     h1 {
-      font-size: 24px;
+      font-size: 32px;
     }
   }
 </style>

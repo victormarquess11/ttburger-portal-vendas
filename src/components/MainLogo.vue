@@ -6,8 +6,8 @@
 
 <style scoped>
     .main-logo {
-        width: 30vw;
-        min-width: 250px;
+        width: 25vw;
+        min-width: 300px;
         margin: auto;
         margin-bottom: 1vh;
         margin-top: 8vh;
