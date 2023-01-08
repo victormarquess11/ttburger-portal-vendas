@@ -1,15 +1,20 @@
 <template>
     <header class="navbar">
+
         <div class="left-items">
-            <div class="title-nav-items">
-                <p id="title-nav" class="navItems">T.T Burger</p>
+
+            <div class="navItems title-nav-items">
+                <p>T.T Burger</p>
             </div>
-            <div class="middle-nav-items">
-                <p id="home-nav" class="navItems">Início</p>
+
+            <div class="navItems middle-nav-items">
+                <p>Início</p>
             </div>
+            
         </div>
-        <div class="right-items">
-            <p id="logout-nav" class="navItems">Logout</p>
+
+        <div class="navItems right-items">
+            <p>Logout</p>
         </div>
 
     </header>
@@ -23,14 +28,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
-
-    .navItems {
-        padding-left: 15px;
-        padding-right: 15px;
-        font-size: 16px;
-        color: white;
-        font-weight: 400;
     }
 
     .left-items {
@@ -64,14 +61,22 @@
         min-width: 140px;
     }
 
-    #title-nav {
+    .title-nav-items p {
         font-size: 22px;
         font-weight: 700;
     }
 
-    #logout-nav {
+    .right-items p {
         color: rgb(141, 141, 141);
         font-weight: 450;
+    }
+
+    .navItems p {
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 16px;
+        color: white;
+        font-weight: 400;
     }
 
 </style>
