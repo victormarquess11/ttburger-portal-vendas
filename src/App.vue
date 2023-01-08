@@ -5,17 +5,21 @@
 
   <h1>Acompanhamento de Vendas</h1>
 
+  <TableSales/>
+
 </template>
 
 <script>
 import MainLogo from './components/MainLogo.vue'
 import NavBar from './components/NavBar.vue'
+import TableSales from './components/TableSales.vue'
 
 export default {
   name: 'App',
   components: {
     MainLogo,
-    NavBar
+    NavBar,
+    TableSales
   }
 }
 </script>
@@ -31,5 +35,10 @@ export default {
   text-align: center;
   color: black;
   background: white;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 34px;
 }
 </style>
