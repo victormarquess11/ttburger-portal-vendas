@@ -1,0 +1,46 @@
+version: "3"
+services:
+  db_sales:
+    build: ./database/
+    container_name: db_sales
+    restart: always
+    ports:
+      - 1234:5432
+    env_file:
+      - ./database/.env.docker
+    volumes:
+      - pg:/var/lib/postgresql/data
+      - ./database/excels/metas.csv:/usr/metas.csv
+      - ./database/excels/venda_produtos.csv:/usr/venda_produtos.csv
+      - ./database/excels/vendas.csv:/usr/vendas.csv
+
+  node_app_sales:
+    container_name: node_app_sales
+    build: ./backend/
+    ports:
+      - 5000:5000
+    depends_on:
+      - db_sales
+    env_file:
+      - ./backend/.env.docker
+
+  # vue_app_sales:
+  #   build: ./frontend
+  #   container_name: vue_app_sales
+  #   volumes:
+  #     - build_vue:/var/www/html
+  # nginx:
+  #   build: ./nginx
+  #   container_name: nginx
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - build_vue:/var/www/html
+  #   depends_on:
+  #     - db_sales
+  #     - node_app_sales
+  #     - vue_app_sales
+
+volumes:
+  pg:
+  # build_vue:
