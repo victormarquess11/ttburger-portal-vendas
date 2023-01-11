@@ -1,17 +1,45 @@
 <script>
+import debounce from 'lodash.debounce'
+
 export default {
   props: {},
-};
+  data() {
+    return {
+      date: "2022-01-29",
+      salesHeader: "Venda (R$)",
+      targetHeader: "Meta (R$)",
+      completedTargetHeader: "Atingimento da meta (%)",
+      productPerClientHeader: "Quantidade de produtos / cliente",
+      averageTickerHeader: "Ticket médio / cliente"
+    };
+  },
+  methods: {
+    callDebouncer: debounce(function(){
+      this.debouncer();
+    }, 1000),
+    debouncer() {
+      this.messager('A')
+    },
+    messager(beacon) {
+      console.log(`debounced from ${beacon}`)
+    }  
+  },
+}
 </script>
 
 <template>
   <tr>
-    <th id="dateHeader">29/01/2022</th>
-    <th>Venda (R$)</th>
-    <th>Meta (R$)</th>
-    <th>Atingimento da meta (%)</th>
-    <th>Quantidade de produtos / cliente</th>
-    <th>Ticket médio / cliente</th>
+    <th>
+      <div id="dateHeader">
+        <input type="date" v-model="date" @input="callDebouncer" max="2099-12-31" min="2013-01-01" />
+        <span class="validity"></span>
+      </div>
+    </th>
+    <th>{{ salesHeader }}</th>
+    <th>{{ targetHeader }}</th>
+    <th>{{ completedTargetHeader }}</th>
+    <th>{{ productPerClientHeader }}</th>
+    <th>{{ averageTickerHeader }}</th>
   </tr>
 </template>
 
@@ -27,11 +55,18 @@ th {
   padding-right: 10px;
 }
 
-#dateHeader {
-  background-color: white;
-  color: black;
-  padding-left: 0px;
-  padding-right: 0px;
-  margin: 0 10px;
+input {
+  border: none;
+  height: 25px;
+  text-align: center;
+}
+
+input:invalid + span::after {
+  content: "✖";
+}
+
+.validity {
+  color: red;
+  margin-left: 5px;
 }
 </style>
