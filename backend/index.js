@@ -22,9 +22,8 @@ const getVendasOpts =  {
       response: {
         200: {
           "type": "array",
-          "items": [
-            {
-
+          "minItems": 0,
+          "items": {
               "type": "object",
               "properties": {
                 "loja": {
@@ -33,115 +32,27 @@ const getVendasOpts =  {
                 "data": {
                   "type": "string"
                 },
-                "meta_valor": {
-                  "type": "string"
-                },
-                "meta_prod_clt": {
-                  "type": "string"
-                },
-                "qtd_compras": {
-                  "type": "string"
-                },
-                "qtd_produtos_vendidos": {
-                  "type": "string"
-                },
                 "valor_total": {
-                  "type": "string"
+                  "type": ["string", "null"]
+                },
+                "qtd_produtos": {
+                  "type": ["string", "null"]
                 },
                 "qtd_clientes": {
-                  "type": "string"
+                  "type": ["string", "null"]
+                },
+                "meta_valor": {
+                  "type": ["string", "null"]
+                },
+                "meta_prod_clt": {
+                  "type": ["string", "null"]
                 }
               },
               "required": [
                 "loja",
                 "data",
-                "meta_valor",
-                "meta_prod_clt",
-                "qtd_compras",
-                "qtd_produtos_vendidos",
-                "valor_total",
-                "qtd_clientes"
-              ]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "loja": {
-                  "type": "string"
-                },
-                "data": {
-                  "type": "string"
-                },
-                "meta_valor": {
-                  "type": "string"
-                },
-                "meta_prod_clt": {
-                  "type": "string"
-                },
-                "qtd_compras": {
-                  "type": "string"
-                },
-                "qtd_produtos_vendidos": {
-                  "type": "string"
-                },
-                "valor_total": {
-                  "type": "string"
-                },
-                "qtd_clientes": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "loja",
-                "data",
-                "meta_valor",
-                "meta_prod_clt",
-                "qtd_compras",
-                "qtd_produtos_vendidos",
-                "valor_total",
-                "qtd_clientes"
-              ]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "loja": {
-                  "type": "string"
-                },
-                "data": {
-                  "type": "string"
-                },
-                "meta_valor": {
-                  "type": "string"
-                },
-                "meta_prod_clt": {
-                  "type": "string"
-                },
-                "qtd_compras": {
-                  "type": "null"
-                },
-                "qtd_produtos_vendidos": {
-                  "type": "null"
-                },
-                "valor_total": {
-                  "type": "null"
-                },
-                "qtd_clientes": {
-                  "type": "null"
-                }
-              },
-              "required": [
-                "loja",
-                "data",
-                "meta_valor",
-                "meta_prod_clt",
-                "qtd_compras",
-                "qtd_produtos_vendidos",
-                "valor_total",
-                "qtd_clientes"
               ]
             }
-          ]
         }
       }
     }
@@ -150,26 +61,55 @@ const getVendasOpts =  {
 
 fastify.get('/vendas', getVendasOpts, (req, reply) => {
   fastify.pg.query(
-    `select metas.loja, metas.data, metas.meta_valor, metas.meta_prod_clt,
-    agregado_vendas.qtd_compras, agregado_vendas.qtd_produtos_vendidos,
-    agregado_vendas.valor_total, agregado_vendas.qtd_clientes
-    from metas
-    FULL JOIN 
+    `SELECT 
+    ag_vendas.loja, 
+    ag_vendas.data, 
+    ag_vendas.valor_total, 
+    ag_vendas.qtd_produtos, 
+    ag_vendas.qtd_clientes, 
+    metas.meta_valor, 
+    metas.meta_prod_clt 
+  FROM 
     (
-    SELECT venda_produtos.loja, vendas.data,
-    COUNT(DISTINCT venda_produtos.id_venda) as qtd_compras,
-    SUM(quantidade) as qtd_produtos_vendidos, 
-    SUM(valor_efetivo) as valor_total ,
-    COUNT(DISTINCT vendas.id_cliente) as qtd_clientes
-    FROM venda_produtos 
-    FULL JOIN vendas 
-    ON venda_produtos.id_venda = vendas.id_venda 
-    WHERE cancelado='N' AND cancelada='f' 
-    GROUP BY venda_produtos.loja, vendas.data
-    ) as agregado_vendas
-    ON metas.loja = agregado_vendas.loja;`,
+      select 
+        con.loja, 
+        con.data, 
+        sum(valor_efetivo) AS valor_total, 
+        count(DISTINCT con.id_venda) AS qtd_vendas, 
+        sum(con.quantidade) AS qtd_produtos, 
+        count(DISTINCT con.id_cliente) AS qtd_clientes 
+      FROM 
+        (
+          SELECT 
+            vendas.id_venda, 
+            vendas.data, 
+            vendas.loja, 
+            NULL AS quantidade, 
+            vendas.valor_efetivo, 
+            vendas.id_cliente 
+          FROM 
+            vendas 
+          WHERE 
+            vendas.cancelada = 'f' 
+          UNION 
+          SELECT 
+            prod.id_venda, 
+            prod.data, 
+            prod.loja, 
+            prod.quantidade, 
+            NULL, 
+            NULL 
+          FROM 
+            venda_produtos AS prod 
+          WHERE 
+            prod.cancelado = 'N'
+        ) AS con 
+      GROUP BY 
+        con.data, 
+        con.loja
+    ) AS ag_vendas 
+    LEFT JOIN metas ON ag_vendas.loja = metas.loja;`,
     function onResult(err, result) {
-
 
       reply.send(err || result.rows);
     }
