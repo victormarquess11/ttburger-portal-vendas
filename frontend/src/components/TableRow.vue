@@ -9,7 +9,8 @@ export default {
             targetSales: "0.00",
             targetCompleted: "0.0%",
             productsSold: "0.0",
-            averageTicket: "0.00" 
+            averageTicket: "0.00",
+            targetProductsSold: "0.00"
       })
     },
   },
@@ -29,7 +30,14 @@ export default {
     },
     averageTicketFormatted() {
       return this.formatToCurrency(this.loja.averageTicket);
-    }
+    },
+    activeColor() {
+      if (Number(this.loja.targetProductsSold) > Number(this.loja.productsSold)){
+        return 'red';
+      }
+      return 'green';
+    },
+
   },
   methods: {
     formatToCurrency(number){
@@ -63,8 +71,8 @@ export default {
     <td class="nameCell">{{ loja.name }}</td>
     <td>{{ salesFormatted }}</td>
     <td>{{ targetSalesFormatted }}</td>
-    <td>{{ targetCompletedFormatted }}</td>
-    <td>{{ productsSoldFormatted }}</td>
+    <td>{{ targetCompletedFormatted }} </td>
+    <td>{{ productsSoldFormatted }} <span class="targetArrow" :style="{ color: activeColor }" >&#8681;</span></td>
     <td>{{ averageTicketFormatted }}</td>
   </tr>
 </template>
@@ -93,4 +101,12 @@ td {
   font-weight: 700;
   font-size: 18px;
 }
+
+.targetArrow {
+  color: black;
+  font-size: 26px;
+  vertical-align: text-bottom;
+}
+
+
 </style>
