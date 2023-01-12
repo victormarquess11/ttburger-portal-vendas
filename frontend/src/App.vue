@@ -3,8 +3,6 @@
 
   <MainLogo />
 
-  <TableTitle />
-
   <TableSales />
 </template>
 
@@ -12,7 +10,6 @@
 import MainLogo from "./components/MainLogo.vue";
 import NavBar from "./components/NavBar.vue";
 import TableSales from "./components/TableSales.vue";
-import TableTitle from "./components/TableTitle.vue";
 
 export default {
   name: "App",
@@ -20,7 +17,6 @@ export default {
     MainLogo,
     NavBar,
     TableSales,
-    TableTitle,
   },
 };
 </script>
