@@ -14,8 +14,8 @@ services:
       - ./database/excels/venda_produtos.csv:/usr/venda_produtos.csv
       - ./database/excels/vendas.csv:/usr/vendas.csv
 
-  node_app_sales:
-    container_name: node_app_sales
+  fastify_backend:
+    container_name: fastify_backend
     build: ./backend/
     ports:
       - 5000:5000
