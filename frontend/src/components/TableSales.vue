@@ -1,31 +1,89 @@
 <script>
+
 import TableHeader from "./TableHeader.vue";
 import TableRow from "./TableRow.vue";
+import TableTitle from "./TableTitle.vue";
+ import TableTotal from "./TableTotal.vue";
 
 export default {
   components: {
     TableHeader,
     TableRow,
+    TableTitle,
+    TableTotal,
   },
   data() {
     return {
-      location1: "Arpoador",
-      location2: "Leblon",
-      location3: "Barra",
-      totalRowName: "Total",
-    };
+      lojas: [],
+    }
   },
+  mounted() {
+    fetch('http://localhost:3000/lojas')
+      .then(res=>res.json())
+      .then(data => this.lojas = data)
+      .catch(err => console.log(err.message));
+  },
+  computed: {
+    totalSales() {
+      if (this.lojas[0]){
+        let onlySales = this.lojas.map(item => Number(item.sales));
+        let sum = onlySales.reduce((prev, next)=> Number(prev) + Number(next))
+        return this.formatToNumber(sum);
+      }
+      return "0.00";
+    },
+    totalTargetSales() {
+      if (this.lojas[0]){
+        let onlyTargetSales = this.lojas.map(item => item.targetSales);
+        let sum = onlyTargetSales.reduce((prev, next)=> Number(prev) + Number(next));
+        return this.formatToNumber(sum);
+      }
+      return "0.00";
+    },
+    totalProductsSold() {
+      if (this.lojas[0]){
+        let onlyProductsSold = this.lojas.map(item => item.productsSold);
+        let sum = onlyProductsSold.reduce((prev, next)=> Number(prev) + Number(next)).toString();
+        return this.formatToNumber(sum/onlyProductsSold.length);
+      }
+      return "0.00";
+    },
+    totalAverageTicket() {
+      if (this.lojas[0]){
+        let onlyAverageTicket = this.lojas.map(item => item.averageTicket);
+        let sum = onlyAverageTicket.reduce((prev, next)=> Number(prev) + Number(next));
+        return this.formatToNumber(sum/onlyAverageTicket.length);
+      }
+      return "0.00";
+    }
+  },
+  methods: {
+    formatToNumber(number){
+      return Number(number).toLocaleString('en-US',{ 
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        useGrouping: false
+      });
+    },
+  }
 };
 </script>
 
 <template>
+  <TableTitle />
+
   <div class="divSales">
     <table class="tableSales">
       <TableHeader />
-      <TableRow :locationName="location1" />
-      <TableRow :locationName="location2" />
-      <TableRow :locationName="location3" />
-      <TableRow :locationName="totalRowName" />
+      <TableRow v-for="sales in lojas" :key="sales.name" :loja="sales" class="loja"/>
+      <TableTotal :loja="{
+                          name: 'Total',
+                          sales: totalSales,
+                          targetSales: totalTargetSales,
+                          targetCompleted: '0%',
+                          productsSold: totalProductsSold,
+                          averageTicket: totalAverageTicket
+                           }" />
     </table>
   </div>
 </template>
@@ -41,7 +99,6 @@ export default {
 table {
   text-align: center;
   border: 1px solid;
-  border-color: red;
   border-collapse: collapse;
   vertical-align: middle;
   font-size: 16px;

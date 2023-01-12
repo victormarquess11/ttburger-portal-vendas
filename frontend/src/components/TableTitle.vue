@@ -5,7 +5,7 @@
 <style>
 h1 {
   font-weight: 700;
-  font-size: 2.5rem;
+  font-size: 1rem;
 }
 
 @media screen and (max-width: 767px) {

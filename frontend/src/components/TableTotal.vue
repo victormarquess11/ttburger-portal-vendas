@@ -4,12 +4,12 @@ export default {
     loja: {
       type: Object,
       default: () => ({
-            name: "Nome da Loja",
-            sales: "0.00",
-            targetSales: "0.00",
-            targetCompleted: "0.0%",
-            productsSold: "0.0",
-            averageTicket: "0.00" 
+            name: "Total",
+            sales: "0,00",
+            targetSales: "0,00",
+            targetCompleted: "0,0%",
+            productsSold: "0,0",
+            averageTicket: "0,00" 
       })
     },
   },
@@ -22,9 +22,9 @@ export default {
     },
     targetCompletedFormatted() {
       return this.formatToPercent(
-        Number(this.loja.sales) / Number(this.loja.targetSales));
+        (this.loja.sales) / (this.loja.targetSales));
     },
-    productsSoldFormatted() {         
+    productsSoldFormatted() {
       return this.formatToNumber(this.loja.productsSold);
     },
     averageTicketFormatted() {
@@ -32,17 +32,17 @@ export default {
     }
   },
   methods: {
-    formatToCurrency(number){
-      return Number(number).toLocaleString('pt-BR', { 
+    formatToCurrency(numberToCurrency){
+      return Number(numberToCurrency).toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-        style: 'currency',
-        currency: 'BRL' 
+        style: 'currency', 
+        currency: 'BRL'
       });
     },
     formatToPercent(number) {
       return Number(number).toLocaleString('pt-BR', { 
-        minimumFractionDigits: 1,
+        minimumFractionDigits: 0,
         maximumFractionDigits: 1,
         style: 'percent' 
       });
@@ -53,7 +53,8 @@ export default {
         maximumFractionDigits: 2,
         useGrouping: false
       });
-    },
+    }
+
   }
 }
 </script>
@@ -70,12 +71,8 @@ export default {
 </template>
 
 <style scoped>
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-tr:nth-child(odd) {
-  background-color: #ffffff;
+tr {
+  background-color: #c0c0c0;
 }
 
 td {

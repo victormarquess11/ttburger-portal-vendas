@@ -6,11 +6,11 @@ export default {
   data() {
     return {
       date: "2022-01-29",
-      salesHeader: "Venda (R$)",
-      targetHeader: "Meta (R$)",
-      completedTargetHeader: "Atingimento da meta (%)",
-      productPerClientHeader: "Quantidade de produtos / cliente",
-      averageTickerHeader: "Ticket médio / cliente"
+      salesHeader: "Venda",
+      targetHeader: "Meta",
+      completedTargetHeader: "Atingimento da meta",
+      productsSoldHeader: "Quantidade de produtos / cliente",
+      averageTicketHeader: "Ticket médio / cliente"
     };
   },
   methods: {
@@ -38,8 +38,8 @@ export default {
     <th>{{ salesHeader }}</th>
     <th>{{ targetHeader }}</th>
     <th>{{ completedTargetHeader }}</th>
-    <th>{{ productPerClientHeader }}</th>
-    <th>{{ averageTickerHeader }}</th>
+    <th>{{ productsSoldHeader }}</th>
+    <th>{{ averageTicketHeader }}</th>
   </tr>
 </template>
 
