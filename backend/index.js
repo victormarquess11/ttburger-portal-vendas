@@ -41,6 +41,9 @@ const getVendasOpts =  {
                 "qtd_clientes": {
                   "type": ["string", "null"]
                 },
+                "qtd_vendas": {
+                  "type": ["string", "null"]
+                },
                 "meta_valor": {
                   "type": ["string", "null"]
                 },
@@ -67,6 +70,7 @@ fastify.get('/vendas', getVendasOpts, (req, reply) => {
     ag_vendas.valor_total, 
     ag_vendas.qtd_produtos, 
     ag_vendas.qtd_clientes, 
+    ag_vendas.qtd_vendas, 
     metas.meta_valor, 
     metas.meta_prod_clt 
   FROM 
@@ -74,41 +78,68 @@ fastify.get('/vendas', getVendasOpts, (req, reply) => {
       select 
         con.loja, 
         con.data, 
-        sum(valor_efetivo) AS valor_total, 
+        sum(con.valor_total) AS valor_total, 
         count(DISTINCT con.id_venda) AS qtd_vendas, 
-        sum(con.quantidade) AS qtd_produtos, 
+        sum(con.qtd_produtos) AS qtd_produtos, 
         count(DISTINCT con.id_cliente) AS qtd_clientes 
       FROM 
         (
           SELECT 
-            vendas.id_venda, 
-            vendas.data, 
-            vendas.loja, 
-            NULL AS quantidade, 
-            vendas.valor_efetivo, 
-            vendas.id_cliente 
+            ORDER_TABLE.ID_VENDA, 
+            ORDER_TABLE.DATA, 
+            ORDER_TABLE.LOJA, 
+            SUM(ORDER_TABLE.qtd_produtos) AS QTD_PRODUTOS, 
+            SUM(ORDER_TABLE.VALOR_TOTAL) AS VALOR_TOTAL, 
+            ORDER_TABLE.id_cliente 
           FROM 
-            vendas 
-          WHERE 
-            vendas.cancelada = 'f' 
-          UNION 
-          SELECT 
-            prod.id_venda, 
-            prod.data, 
-            prod.loja, 
-            prod.quantidade, 
-            NULL, 
-            NULL 
-          FROM 
-            venda_produtos AS prod 
-          WHERE 
-            prod.cancelado = 'N'
+            (
+              SELECT 
+                VENDAS.ID_VENDA, 
+                VENDAS.DATA, 
+                VENDAS.LOJA, 
+                NULL AS QTD_PRODUTOS, 
+                SUM(VENDAS.VALOR_EFETIVO) AS VALOR_TOTAL, 
+                VENDAS.ID_CLIENTE 
+              FROM 
+                VENDAS 
+              WHERE 
+                VENDAS.CANCELADA = 'f' 
+              GROUP BY 
+                VENDAS.ID_VENDA, 
+                VENDAS.DATA, 
+                VENDAS.LOJA, 
+                VENDAS.ID_CLIENTE 
+              UNION 
+              SELECT 
+                PROD.ID_VENDA, 
+                PROD.DATA, 
+                PROD.LOJA, 
+                SUM(PROD.QUANTIDADE) AS QTD_PRODUTOS, 
+                NULL AS VALOR_TOTAL, 
+                NULL AS QTD_CLIENTES 
+              FROM 
+                VENDA_PRODUTOS AS PROD 
+              WHERE 
+                PROD.CANCELADO = 'N' 
+              GROUP BY 
+                PROD.ID_VENDA, 
+                PROD.DATA, 
+                PROD.LOJA
+            ) AS ORDER_TABLE 
+          GROUP BY 
+            ORDER_TABLE.ID_VENDA, 
+            ORDER_TABLE.DATA, 
+            ORDER_TABLE.LOJA, 
+            ORDER_TABLE.id_cliente 
+          ORDER BY 
+            ORDER_TABLE.ID_VENDA
         ) AS con 
       GROUP BY 
         con.data, 
         con.loja
     ) AS ag_vendas 
-    LEFT JOIN metas ON ag_vendas.loja = metas.loja;`,
+    LEFT JOIN metas ON ag_vendas.loja = metas.loja
+    ORDER BY ag_vendas.loja;`,
     function onResult(err, result) {
 
       reply.send(err || result.rows);
