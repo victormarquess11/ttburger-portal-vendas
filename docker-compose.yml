@@ -24,23 +24,14 @@ services:
     env_file:
       - ./backend/.env.docker
 
-  # vue_app_sales:
-  #   build: ./frontend
-  #   container_name: vue_app_sales
-  #   volumes:
-  #     - build_vue:/var/www/html
-  # nginx:
-  #   build: ./nginx
-  #   container_name: nginx
-  #   ports:
-  #     - 80:80
-  #   volumes:
-  #     - build_vue:/var/www/html
-  #   depends_on:
-  #     - db_sales
-  #     - node_app_sales
-  #     - vue_app_sales
+  vue_frontend:
+    build: ./frontend
+    container_name: vue_frontend
+    volumes:
+      - frontend:/home/app
+    ports:
+      - '8080:8080'
 
 volumes:
   pg:
-  # build_vue:
+  frontend:
