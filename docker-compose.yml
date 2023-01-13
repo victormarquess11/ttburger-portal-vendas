@@ -28,9 +28,18 @@ services:
     build: ./frontend
     container_name: vue_frontend
     volumes:
-      - frontend:/home/app
+      - frontend:/var/www/html
+
+  nginx_server:
+    build: ./nginx
+    container_name: nginx_server
     ports:
-      - '8080:8080'
+      - 80:80
+    volumes:
+      - frontend:/var/www/html
+    depends_on:
+      - fastify_backend
+      - vue_frontend
 
 volumes:
   pg:
