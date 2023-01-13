@@ -1,24 +1,24 @@
-# ttburger-portal-vendas
+# TT Burger Portal de Vendas
 
-## Project setup
-```
-npm install
-```
+## Requisitos
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+* Docker instalado (https://docs.docker.com/get-docker/)
 
-### Compiles and minifies for production
+## Rodando a Aplicação
+
+* Digite o seguinte comando no termina, na pasta raiz do repositório
+
 ```
-npm run build
+docker-compose up
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Url do Portal de Vendas
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+* http://127.0.0.1:8080/
+
+## Rotas da API
+
+* http://127.0.0.1:5000/
+* http://127.0.0.1:5000/vendas
+
+
