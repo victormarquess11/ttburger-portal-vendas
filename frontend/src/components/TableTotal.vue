@@ -1,34 +1,33 @@
 <script>
 export default {
   props: {
-    loja: {
+    totals: {
       type: Object,
       default: () => ({
-            name: "Total",
-            sales: "0,00",
-            targetSales: "0,00",
-            targetCompleted: "0,0%",
-            productsSold: "0,0",
-            averageTicket: "0,00" 
+            loja: "Total",
+            meta_valor: "0,00",
+            valor_total: "0",
+            qtd_produtos: "0",
+            average_ticket: "0.00"
       })
     },
   },
   computed: {
     salesFormatted() {
-      return this.formatToCurrency(this.loja.sales);
+      return this.formatToCurrency(this.totals.valor_total);
     },
     targetSalesFormatted() {
-      return this.formatToCurrency(this.loja.targetSales);
+      return this.formatToCurrency(this.totals.meta_valor);
     },
     targetCompletedFormatted() {
       return this.formatToPercent(
-        (this.loja.sales) / (this.loja.targetSales));
+        (this.totals.valor_total) / (this.totals.meta_valor));
     },
-    productsSoldFormatted() {
-      return this.formatToNumber(this.loja.productsSold);
+    productsPerSaleFormatted() {
+      return this.formatToNumber(this.totals.qtd_produtos);
     },
     averageTicketFormatted() {
-      return this.formatToCurrency(this.loja.averageTicket);
+      return this.formatToCurrency(this.totals.average_ticket);
     }
   },
   methods: {
@@ -61,11 +60,11 @@ export default {
 
 <template>
   <tr>
-    <td class="nameCell">{{ loja.name }}</td>
+    <td class="nameCell">{{ totals.loja }}</td>
     <td>{{ salesFormatted }}</td>
     <td>{{ targetSalesFormatted }}</td>
     <td>{{ targetCompletedFormatted }}</td>
-    <td>{{ productsSoldFormatted }}</td>
+    <td>{{ productsPerSaleFormatted }}</td>
     <td>{{ averageTicketFormatted }}</td>
   </tr>
 </template>

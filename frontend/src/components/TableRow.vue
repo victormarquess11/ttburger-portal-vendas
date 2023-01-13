@@ -1,38 +1,40 @@
 <script>
 export default {
   props: {
-    loja: {
+    sale: {
       type: Object,
       default: () => ({
-            name: "Nome da Loja",
-            sales: "0.00",
-            targetSales: "0.00",
-            targetCompleted: "0.0%",
-            productsSold: "0.0",
-            averageTicket: "0.00",
-            targetProductsSold: "0.00"
+            loja: "Nome da Loja",
+            data: "2022-01-29",
+            valor_total: "0.00",
+            qtd_produtos: "0",
+            qtd_vendas: "0",
+            qtd_clientes: "0",
+            meta_valor: "0.00",
+            meta_prod_clt: "0.0"
       })
     },
   },
   computed: {
     salesFormatted() {
-      return this.formatToCurrency(this.loja.sales);
+      return this.formatToCurrency(this.sale.valor_total);
     },
     targetSalesFormatted() {
-      return this.formatToCurrency(this.loja.targetSales);
+      return this.formatToCurrency(this.sale.meta_valor);
     },
     targetCompletedFormatted() {
       return this.formatToPercent(
-        Number(this.loja.sales) / Number(this.loja.targetSales));
+        Number(this.sale.valor_total) / Number(this.sale.meta_valor));
     },
-    productsSoldFormatted() {         
-      return this.formatToNumber(this.loja.productsSold);
+    productsPerSaleFormatted() {         
+      return this.formatToNumber(Number(this.sale.qtd_produtos)/Number(this.sale.qtd_vendas));
     },
     averageTicketFormatted() {
-      return this.formatToCurrency(this.loja.averageTicket);
+      return this.formatToCurrency(        
+        Number(this.sale.valor_total) / Number(this.sale.qtd_vendas));
     },
     activeColor() {
-      if (Number(this.loja.targetProductsSold) > Number(this.loja.productsSold)){
+      if (Number(this.sale.meta_prod_clt) > Number(this.sale.qtd_produtos)){
         return 'red';
       }
       return 'green';
@@ -68,11 +70,15 @@ export default {
 
 <template>
   <tr>
-    <td class="nameCell">{{ loja.name }}</td>
+    <td class="nameCell">{{ sale.loja }}</td>
     <td>{{ salesFormatted }}</td>
     <td>{{ targetSalesFormatted }}</td>
     <td>{{ targetCompletedFormatted }} </td>
-    <td>{{ productsSoldFormatted }} <span class="targetArrow" :style="{ color: activeColor }" >&#8681;</span></td>
+    <td>{{ productsPerSaleFormatted }} 
+        <span v-if="activeColor=='red'" class="red Arrow" >&#8681;</span>
+        <span v-if="activeColor=='green'" class="green Arrow" >&#8679;</span>
+        
+    </td>
     <td>{{ averageTicketFormatted }}</td>
   </tr>
 </template>
@@ -96,16 +102,24 @@ td {
   padding-right: 20px;
 }
 
-.nameCell {
+.lojaCell {
   color: #3c59ff;
   font-weight: 700;
   font-size: 18px;
 }
 
-.targetArrow {
+.Arrow {
   color: black;
-  font-size: 26px;
+  font-size: 27px;
   vertical-align: text-bottom;
+}
+
+.green{
+  color: green;
+}
+
+.red{
+  color: red;
 }
 
 

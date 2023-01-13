@@ -1,9 +1,8 @@
 <script>
-
 import TableHeader from "./TableHeader.vue";
 import TableRow from "./TableRow.vue";
 import TableTitle from "./TableTitle.vue";
- import TableTotal from "./TableTotal.vue";
+import TableTotal from "./TableTotal.vue";
 
 export default {
   components: {
@@ -14,43 +13,43 @@ export default {
   },
   data() {
     return {
-      lojas: [],
+      sales: [],
     }
   },
   mounted() {
-    fetch('http://localhost:3000/lojas')
+    fetch('http://localhost:5000/vendas')
       .then(res=>res.json())
-      .then(data => this.lojas = data)
+      .then(data => this.sales = data)
       .catch(err => console.log(err.message));
   },
   computed: {
     totalSales() {
-      if (this.lojas[0]){
-        let onlySales = this.lojas.map(item => Number(item.sales));
+      if (this.sales[0]){
+        let onlySales = this.sales.map(item => Number(item.valor_total));
         let sum = onlySales.reduce((prev, next)=> Number(prev) + Number(next))
         return this.formatToNumber(sum);
       }
       return "0.00";
     },
     totalTargetSales() {
-      if (this.lojas[0]){
-        let onlyTargetSales = this.lojas.map(item => item.targetSales);
+      if (this.sales[0]){
+        let onlyTargetSales = this.sales.map(item => Number(item.meta_valor));
         let sum = onlyTargetSales.reduce((prev, next)=> Number(prev) + Number(next));
         return this.formatToNumber(sum);
       }
       return "0.00";
     },
-    totalProductsSold() {
-      if (this.lojas[0]){
-        let onlyProductsSold = this.lojas.map(item => item.productsSold);
+    totalProductsPerSale() {
+      if (this.sales[0]){
+        let onlyProductsSold = this.sales.map(item => Number(item.qtd_produtos)/Number(item.qtd_vendas));
         let sum = onlyProductsSold.reduce((prev, next)=> Number(prev) + Number(next)).toString();
         return this.formatToNumber(sum/onlyProductsSold.length);
       }
       return "0.00";
     },
     totalAverageTicket() {
-      if (this.lojas[0]){
-        let onlyAverageTicket = this.lojas.map(item => item.averageTicket);
+      if (this.sales[0]){
+        let onlyAverageTicket = this.sales.map(item => Number(item.valor_total) / Number(item.qtd_vendas));
         let sum = onlyAverageTicket.reduce((prev, next)=> Number(prev) + Number(next));
         return this.formatToNumber(sum/onlyAverageTicket.length);
       }
@@ -75,14 +74,13 @@ export default {
   <div class="divSales">
     <table class="tableSales">
       <TableHeader />
-      <TableRow v-for="sales in lojas" :key="sales.name" :loja="sales" class="loja"/>
-      <TableTotal :loja="{
-                          name: 'Total',
-                          sales: totalSales,
-                          targetSales: totalTargetSales,
-                          targetCompleted: '0%',
-                          productsSold: totalProductsSold,
-                          averageTicket: totalAverageTicket
+      <TableRow v-for="sale in sales" :key="sale.loja" :sale="sale" class="salesRow"/>
+      <TableTotal :totals="{
+                          loja: 'Total',
+                          meta_valor: totalTargetSales,
+                          valor_total: totalSales,
+                          qtd_produtos: totalProductsPerSale,
+                          average_ticket: totalAverageTicket
                            }" />
     </table>
   </div>
