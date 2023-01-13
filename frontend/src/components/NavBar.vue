@@ -4,7 +4,7 @@
         <div class="left-items">
 
             <div class="navItems title-nav-items">
-                <p>T.T Burger</p>
+                <p>T.T. Burger</p>
             </div>
 
             <div class="navItems middle-nav-items">
