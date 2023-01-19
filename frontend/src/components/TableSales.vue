@@ -14,10 +14,11 @@ export default {
   data() {
     return {
       sales: [],
+      date: "2019-01-29",
     };
   },
   mounted() {
-    fetch("http://localhost/api/vendas")
+    fetch("http://localhost/api/vendas/" + this.date)
       .then((res) => res.json())
       .then((data) => (this.sales = data))
       .catch((err) => console.log(err.message));
@@ -74,6 +75,13 @@ export default {
         useGrouping: false,
       });
     },
+    updateDate(input) {
+      this.date = input;
+      fetch("http://localhost/api/vendas/" + this.date)
+        .then((res) => res.json())
+        .then((data) => (this.sales = data))
+        .catch((err) => console.log(err.message));
+    },
   },
 };
 </script>
@@ -83,7 +91,7 @@ export default {
 
   <div class="divSales">
     <table class="tableSales">
-      <TableHeader />
+      <TableHeader @update-date="updateDate" />
       <TableRow
         v-for="sale in sales"
         :key="sale.loja"

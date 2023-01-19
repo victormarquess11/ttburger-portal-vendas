@@ -1,37 +1,43 @@
 <script>
-import debounce from 'lodash.debounce'
+import debounce from "lodash.debounce";
 
 export default {
   props: {},
   data() {
     return {
-      date: "2022-01-29",
+      date: "2019-01-29",
       salesHeader: "Venda",
       targetHeader: "Meta",
       completedTargetHeader: "Atingimento da meta",
       productsSoldHeader: "Quantidade de produtos / cliente",
-      averageTicketHeader: "Ticket médio / cliente"
+      averageTicketHeader: "Ticket médio / cliente",
     };
   },
   methods: {
-    callDebouncer: debounce(function(){
+    callDebouncer: debounce(function () {
       this.debouncer();
     }, 1000),
     debouncer() {
-      this.messager('A')
+      this.messager();
     },
-    messager(beacon) {
-      console.log(`debounced from ${beacon}`)
-    }  
+    messager() {
+      this.$emit("updateDate", this.date);
+    },
   },
-}
+};
 </script>
 
 <template>
   <tr>
     <th>
       <div id="dateHeader">
-        <input type="date" v-model="date" @input="callDebouncer" max="2099-12-31" min="2013-01-01" />
+        <input
+          type="date"
+          v-model="date"
+          @input="callDebouncer"
+          max="2099-12-31"
+          min="2013-01-01"
+        />
         <span class="validity"></span>
       </div>
     </th>
