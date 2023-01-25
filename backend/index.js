@@ -1,68 +1,68 @@
-const fastify = require('fastify')({logger: true}) 
+const fastify = require('fastify')({ logger: true })
 
 fastify.register(require('@fastify/postgres'), {
-  connectionString:  `postgres://${process.env.POSTGRES_USERNAME}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`
+  connectionString: `postgres://${process.env.POSTGRES_USERNAME}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`
 })
 
 fastify.register(require('@fastify/cors'), {
-  origin:'*',
-  methods:['GET','POST'],
+  origin: '*',
+  methods: ['GET', 'POST'],
 })
 
 fastify.get('/', (request, reply) => {
   reply.send({
-      empresa: "TT-burger",
-      aplicação: "Portal de Vendas",
-      rotas: [ "/vendas" ]
-      })
+    empresa: "TT-burger",
+    aplicação: "Portal de Vendas",
+    rotas: ["/vendas"]
+  })
 });
 
-const getVendasOpts =  {
-    schema: {
-      response: {
-        200: {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-              "type": "object",
-              "properties": {
-                "loja": {
-                  "type": "string"
-                },
-                "data": {
-                  "type": "string"
-                },
-                "valor_total": {
-                  "type": ["string", "null"]
-                },
-                "qtd_produtos": {
-                  "type": ["string", "null"]
-                },
-                "qtd_clientes": {
-                  "type": ["string", "null"]
-                },
-                "qtd_vendas": {
-                  "type": ["string", "null"]
-                },
-                "meta_valor": {
-                  "type": ["string", "null"]
-                },
-                "meta_prod_clt": {
-                  "type": ["string", "null"]
-                }
-              },
-              "required": [
-                "loja",
-                "data",
-              ]
+const getVendasOpts = {
+  schema: {
+    response: {
+      200: {
+        "type": "array",
+        "minItems": 0,
+        "items": {
+          "type": "object",
+          "properties": {
+            "loja": {
+              "type": "string"
+            },
+            "data": {
+              "type": "string"
+            },
+            "valor_total": {
+              "type": ["string", "null"]
+            },
+            "qtd_produtos": {
+              "type": ["string", "null"]
+            },
+            "qtd_clientes": {
+              "type": ["string", "null"]
+            },
+            "qtd_vendas": {
+              "type": ["string", "null"]
+            },
+            "meta_valor": {
+              "type": ["string", "null"]
+            },
+            "meta_prod_clt": {
+              "type": ["string", "null"]
             }
+          },
+          "required": [
+            "loja",
+            "data",
+          ]
         }
       }
     }
   }
-    
+}
 
-fastify.get('/vendas', getVendasOpts, (req, reply) => {
+
+fastify.get('/vendas/:data', getVendasOpts, (req, reply) => {
   fastify.pg.query(
     `SELECT 
     ag_vendas.loja, 
@@ -103,7 +103,8 @@ fastify.get('/vendas', getVendasOpts, (req, reply) => {
               FROM 
                 VENDAS 
               WHERE 
-                VENDAS.CANCELADA = 'f' 
+                VENDAS.CANCELADA = 'f' AND
+				VENDAS.DATA = CAST($1 AS DATE)
               GROUP BY 
                 VENDAS.ID_VENDA, 
                 VENDAS.DATA, 
@@ -120,7 +121,8 @@ fastify.get('/vendas', getVendasOpts, (req, reply) => {
               FROM 
                 VENDA_PRODUTOS AS PROD 
               WHERE 
-                PROD.CANCELADO = 'N' 
+                PROD.CANCELADO = 'N' AND
+				PROD.DATA = CAST($1 AS DATE)
               GROUP BY 
                 PROD.ID_VENDA, 
                 PROD.DATA, 
@@ -139,19 +141,22 @@ fastify.get('/vendas', getVendasOpts, (req, reply) => {
         con.loja
     ) AS ag_vendas 
     LEFT JOIN metas ON ag_vendas.loja = metas.loja
-    ORDER BY ag_vendas.loja;`,
+	WHERE 
+		metas.DATA = CAST($1 AS DATE)
+    ORDER BY ag_vendas.loja;`, [req.params.data],
     function onResult(err, result) {
 
       reply.send(err || result.rows);
     }
   )
 });
+
 // Server
 fastify.listen({ port: 5000, host: '0.0.0.0' }, function (err, address) {
   if (err) {
     fastify.log.error(err)
     process.exit(1)
   } else {
-    console.log('Server is up and running on port 5000' )
+    console.log('Server is up and running on port 5000')
   }
 })

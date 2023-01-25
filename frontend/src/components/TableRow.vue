@@ -4,15 +4,14 @@ export default {
     sale: {
       type: Object,
       default: () => ({
-            loja: "Nome da Loja",
-            data: "2022-01-29",
-            valor_total: "0.00",
-            qtd_produtos: "0",
-            qtd_vendas: "0",
-            qtd_clientes: "0",
-            meta_valor: "0.00",
-            meta_prod_clt: "0.0"
-      })
+        loja: "Nome da Loja",
+        valor_total: "0.00",
+        qtd_produtos: "0",
+        qtd_vendas: "0",
+        qtd_clientes: "0",
+        meta_valor: "0.00",
+        meta_prod_clt: "0.0",
+      }),
     },
   },
   computed: {
@@ -24,48 +23,51 @@ export default {
     },
     targetCompletedFormatted() {
       return this.formatToPercent(
-        Number(this.sale.valor_total) / Number(this.sale.meta_valor));
+        Number(this.sale.valor_total) / Number(this.sale.meta_valor)
+      );
     },
-    productsPerSaleFormatted() {         
-      return this.formatToNumber(Number(this.sale.qtd_produtos)/Number(this.sale.qtd_vendas));
+    productsPerSaleFormatted() {
+      return this.formatToNumber(
+        Number(this.sale.qtd_produtos) / Number(this.sale.qtd_vendas)
+      );
     },
     averageTicketFormatted() {
-      return this.formatToCurrency(        
-        Number(this.sale.valor_total) / Number(this.sale.qtd_vendas));
+      return this.formatToCurrency(
+        Number(this.sale.valor_total) / Number(this.sale.qtd_vendas)
+      );
     },
     activeColor() {
-      if (Number(this.sale.meta_prod_clt) > Number(this.sale.qtd_produtos)){
-        return 'red';
+      if (Number(this.sale.meta_prod_clt) > Number(this.sale.qtd_produtos)) {
+        return "red";
       }
-      return 'green';
+      return "green";
     },
-
   },
   methods: {
-    formatToCurrency(number){
-      return Number(number).toLocaleString('pt-BR', { 
+    formatToCurrency(number) {
+      return Number(number).toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-        style: 'currency',
-        currency: 'BRL' 
+        style: "currency",
+        currency: "BRL",
       });
     },
     formatToPercent(number) {
-      return Number(number).toLocaleString('pt-BR', { 
+      return Number(number).toLocaleString("pt-BR", {
         minimumFractionDigits: 1,
         maximumFractionDigits: 1,
-        style: 'percent' 
+        style: "percent",
       });
     },
-    formatToNumber(number){
-      return Number(number).toLocaleString('pt-BR', { 
+    formatToNumber(number) {
+      return Number(number).toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-        useGrouping: false
+        useGrouping: false,
       });
     },
-  }
-}
+  },
+};
 </script>
 
 <template>
@@ -73,11 +75,11 @@ export default {
     <td class="nameCell">{{ sale.loja }}</td>
     <td>{{ salesFormatted }}</td>
     <td>{{ targetSalesFormatted }}</td>
-    <td>{{ targetCompletedFormatted }} </td>
-    <td>{{ productsPerSaleFormatted }} 
-        <span v-if="activeColor=='red'" class="red Arrow" >&#8681;</span>
-        <span v-if="activeColor=='green'" class="green Arrow" >&#8679;</span>
-        
+    <td>{{ targetCompletedFormatted }}</td>
+    <td>
+      {{ productsPerSaleFormatted }}
+      <span v-if="activeColor == 'red'" class="red Arrow">&#8681;</span>
+      <span v-if="activeColor == 'green'" class="green Arrow">&#8679;</span>
     </td>
     <td>{{ averageTicketFormatted }}</td>
   </tr>
@@ -114,13 +116,11 @@ td {
   vertical-align: text-bottom;
 }
 
-.green{
+.green {
   color: green;
 }
 
-.red{
+.red {
   color: red;
 }
-
-
 </style>
