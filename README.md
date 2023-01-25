@@ -1,8 +1,5 @@
 # TT Burger Portal de Vendas
 
-## Link do Deploy
-http://ec2-15-229-35-72.sa-east-1.compute.amazonaws.com
-
 ## Requisitos
 * Docker instalado (https://docs.docker.com/get-docker/)
 
